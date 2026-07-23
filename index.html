@@ -28,7 +28,7 @@
     }
     h3 {
       color: #2c3e50;
-      font-size: 50px;
+      font-size: 30px;
       margin-bottom: 16px;
     }
     p {
@@ -71,7 +71,7 @@
     let finalUrl = "";
 
     function showError(msg) {
-      document.getElementById('titleText').innerText = '❌ 發生問題';
+      document.getElementById('titleText').innerText = '❌發生問題';
       const statusEl = document.getElementById('statusText');
       statusEl.innerHTML = msg;
       statusEl.classList.add('error');
@@ -94,14 +94,14 @@
 
         finalUrl = WEBAPP_EXEC_URL + "?userId=" + encodeURIComponent(profile.userId);
 
-        document.getElementById('titleText').innerText = '✅ 身分確認完成';
+        document.getElementById('titleText').innerText = '✅身分確認完成';
         document.getElementById('statusText').innerText = '正在為您開啟記帳本...';
 
         goToApp();
 
         // 保險：0.8 秒後如果還沒跳轉成功，顯示按鈕讓使用者手動點
         setTimeout(() => {
-          document.getElementById('statusText').innerText = '請點擊下方按鈕進入記帳本';
+          document.getElementById('statusText').innerText = '若無反應，請點擊下方按鈕進入記帳本';
           document.getElementById('enterBtn').style.display = 'block';
         }, 800);
       })
