@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>載入中 - 雲端快速記帳</title>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f9fa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      background: white;
+      text-align: center;
+    }
+    h3 {
+      color: #2c3e50;
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #555;
+      font-size: 32px;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+    .error { color: #e74c3c; }
+    #enterBtn {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+      background-color: #06c755;
+      color: white;
+      border: none;
+      padding: 30px;
+      font-size: 40px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(6, 199, 85, 0.4);
+    }
+    #enterBtn:active { background-color: #05b24c; }
+  </style>
+</head>
+<body>
+  <div class="container" id="loadingCard">
+    <h3 id="titleText">🔄 確認身分中...</h3>
+    <p id="statusText">請稍候</p>
+    <button id="enterBtn" onclick="goToApp()">🚀 進入記帳本</button>
+  </div>
+
+  <script>
+    // ====== 請確認這兩個值 ======
+    const LIFF_ID = "2010788877-AySlTSnZ";
+    const WEBAPP_EXEC_URL = "https://script.google.com/macros/s/AKfycbya74m4957RAvcOLxC8mHAyvemilrS1MfCC8UpF-DPaxhe5f-SxOOE0TBRiuNzTn3fioQ/exec";
+    // ============================
+
+    let finalUrl = "";
+
+    function showError(msg) {
+      document.getElementById('titleText').innerText = '❌ 發生問題';
+      const statusEl = document.getElementById('statusText');
+      statusEl.innerHTML = msg;
+      statusEl.classList.add('error');
+    }
+
+    function goToApp() {
+      if (finalUrl) window.location.replace(finalUrl);
+    }
+
+    liff.init({ liffId: LIFF_ID })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return null;
+        }
+        return liff.getProfile();
+      })
+      .then((profile) => {
+        if (!profile) return; // liff.login() 已觸發轉址，這裡不用再做事
+
+        finalUrl = WEBAPP_EXEC_URL + "?userId=" + encodeURIComponent(profile.userId);
+
+        document.getElementById('titleText').innerText = '✅ 身分確認完成';
+        document.getElementById('statusText').innerText = '正在為您開啟記帳本...';
+
+        goToApp();
+
+        // 保險：0.8 秒後如果還沒跳轉成功，顯示按鈕讓使用者手動點
+        setTimeout(() => {
+          document.getElementById('statusText').innerText = '請點擊下方按鈕進入記帳本';
+          document.getElementById('enterBtn').style.display = 'block';
+        }, 800);
+      })
+      .catch((err) => {
+        showError('身分驗證失敗：' + err.message + '<br>請聯繫管理員協助處理。');
+      });
+  </script>
+</body>
+</html>
