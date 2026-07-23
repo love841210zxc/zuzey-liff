@@ -22,7 +22,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 24px;
+      padding: 20px;
       background: white;
       text-align: center;
     }
@@ -41,12 +41,12 @@
     #enterBtn {
       display: none;
       width: 100%;
-      max-width: 400px;
+      max-width: 300px;
       background-color: #06c755;
       color: white;
       border: none;
-      padding: 25px;
-      font-size: 30px;
+      padding: 16px 24px;
+      font-size: 20px;
       border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
@@ -99,7 +99,7 @@
 
         goToApp();
 
-        // 保險：0.8 秒後如果還沒跳轉成功，顯示按鈕讓使用者手動點
+        // 保險：2 秒後如果還沒跳轉成功，顯示按鈕讓使用者手動點
         setTimeout(() => {
           document.getElementById('statusText').innerText = '若無反應，請點擊下方按鈕進入記帳本';
           document.getElementById('enterBtn').style.display = 'block';
